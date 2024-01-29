@@ -192,6 +192,7 @@ class ArcHybridLSTM:
             swap_cost = 1
 
         costs = (left_cost, right_cost, shift_cost, swap_cost,1)
+        print("costs:", costs)
         return costs,shift_case
 
 
@@ -368,9 +369,11 @@ class ArcHybridLSTM:
                 lerrors = 0
 
             sentence = deepcopy(sentence) # ensures we are working with a clean copy of sentence and allows memory to be recycled each time round the loop
-
             conll_sentence = [entry for entry in sentence if isinstance(entry, utils.ConllEntry)]
             conll_sentence = conll_sentence[1:] + [conll_sentence[0]]
+            print("New sentence:")
+            for w in conll_sentence:
+                print(str(w))
             self.feature_extractor.getWordEmbeddings(conll_sentence, True, options)
             stack = ParseForest([])
             buf = ParseForest(conll_sentence)
@@ -415,7 +418,7 @@ class ArcHybridLSTM:
 
                 if best[1] == LEFT_ARC or best[1] ==RIGHT_ARC:
                     child = s0[0]
-
+                print("bestValid:", bestValid, "bestWrong:", bestWrong, "best:", best)
                 #updates for the dynamic oracle
                 if self.oracle:
                     self.oracle_updates(best,b,s0,stack_ids,shift_case)
