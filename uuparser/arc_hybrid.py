@@ -398,12 +398,13 @@ class ArcHybridLSTM:
                 beta = buf.roots[1:] if len(buf) > 1 else []
 
                 costs, shift_case = self.calculate_cost(scores,s0,s1,b,beta,stack_ids)
+                print("costs:", costs)
 
                 bestValid = list(( s for s in chain(*scores) if costs[s[1]] == 0 and ( s[1] == SHIFT or s[1] == SWAP or  s[0] == s0[0].relation ) ))
 
                 bestValid = max(bestValid, key=itemgetter(2))
                 bestWrong = max(( s for s in chain(*scores) if costs[s[1]] != 0 or ( s[1] != SHIFT and s[1] != SWAP and s[0] != s0[0].relation ) ), key=itemgetter(2))
-
+                
                 #force swap
                 if costs[SWAP]== 0:
                     best = bestValid
